@@ -1,33 +1,21 @@
-import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
 
-const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const generateEmoji = async (text) => {
   try {
     if (!text.trim()) {
       console.error(`Provided text is empy`);
     }
-    const response = await axios.post(
-      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
-      {
-        contents: [
-          {
-            parts: [
-              {
-                text: `Give me a single emoji that best describes this text: ${text}`,
-              },
-            ],
-          },
-        ],
-      }
+    const result = await model.generateContent(
+      `Give me a single emoji that best describes this text: ${text}`
     );
 
-    return (
-      response.data.candidates?.[0]?.content?.parts?.[0]?.text.trim() || "❓"
-    );
+    return result.response.text().trim() || "❓";
   } catch (error) {
     console.error(`Error fetching from Gemini AI: ${error}`);
     return "❌";
