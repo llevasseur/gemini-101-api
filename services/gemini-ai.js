@@ -6,7 +6,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const generateEmoji = async (text) => {
+const generateEmojiService = async (text) => {
   try {
     if (!text.trim()) {
       console.error(`Provided text is empy`);
@@ -22,4 +22,4 @@ const generateEmoji = async (text) => {
   }
 };
 
-export { generateEmoji };
+export { generateEmojiService };
