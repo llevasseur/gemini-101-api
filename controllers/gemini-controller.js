@@ -1,5 +1,5 @@
 import { generateEmojiService } from "../services/gemini-ai.js";
-
+import isSingleEmoji from "../services/is-single-emoji.js";
 const geminiEmoji = async (req, res) => {
   const { prompt } = req.body;
   if (!prompt.trim()) {
@@ -8,8 +8,9 @@ const geminiEmoji = async (req, res) => {
   }
   try {
     const response = await generateEmojiService(prompt);
-    if (response === "❌") {
+    if (!isSingleEmoji(response)) {
       res.status(400).send(`Bad request`);
+      return;
     }
     res.send(response);
   } catch (error) {
