@@ -3,10 +3,14 @@ import { generateEmojiService } from "../services/gemini-ai.js";
 const geminiEmoji = async (req, res) => {
   const { prompt } = req.body;
   if (!prompt.trim()) {
-    res.status(404).send(`Prompt must be provided to generate emoji`);
+    res.status(400).send(`Prompt must be provided to generate emoji`);
+    return;
   }
   try {
     const response = await generateEmojiService(prompt);
+    if (response === "❌") {
+      res.status(400).send(`Bad request`);
+    }
     res.send(response);
   } catch (error) {
     res

@@ -9,15 +9,20 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const generateEmojiService = async (text) => {
   try {
     if (!text.trim()) {
-      console.error(`Provided text is empy`);
+      throw new Error("Provided text is empty");
     }
     const result = await model.generateContent(
       `Give me a single emoji that best describes this text: ${text}`
     );
 
-    return result.response.text().trim() || "❓";
+    let emoji = result.response.text().trim() || "❓";
+    if (emoji.length !== 2) {
+      emoji = "😡";
+    }
+
+    return emoji;
   } catch (error) {
-    console.error(`Error fetching from Gemini AI: ${error}`);
+    console.log(`Cannot fetch from Gemini AI. ${error}`);
     return "❌";
   }
 };
