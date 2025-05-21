@@ -8,5 +8,5 @@ Create a .env file and add your own GEMINI_API_KEY, and preferred port.
 
 # Installation
 
-npm i
-npm run dev
+- npm i
+- npm run dev
